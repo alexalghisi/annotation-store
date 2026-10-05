@@ -129,7 +129,7 @@ defmodule Annotations.Store do
     |> Enum.with_index()
     |> Enum.reject(fn {cs, _} -> cs.valid? end)
     |> Enum.map(fn {cs, index} ->
-      %{index: index, errors: Ecto.Changeset.traverse_errors(cs, fn {msg, _} -> msg end)}
+      %{index: index, errors: Annotations.Errors.messages(cs)}
     end)
   end
 

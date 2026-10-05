@@ -16,7 +16,7 @@ defmodule AnnotationsWeb.DocumentController do
   def create(conn, params) do
     case Store.create_document(conn.assigns.tenant_id, Map.take(params, ["title"])) do
       {:ok, doc} -> conn |> put_status(201) |> json(%{id: doc.id, title: doc.title})
-      {:error, cs} -> conn |> put_status(422) |> json(%{errors: Ecto.Changeset.traverse_errors(cs, fn {m, _} -> m end)})
+      {:error, cs} -> conn |> put_status(422) |> json(%{errors: Annotations.Errors.messages(cs)})
     end
   end
 end

@@ -37,6 +37,11 @@ defmodule AnnotationsWeb.ApiTest do
     conn = api() |> post("/api/documents/#{id}/annotations/batch", %{annotations: [annotation(%{"kind" => "doodle"})]})
     assert %{"errors" => [%{"index" => 0, "errors" => %{"kind" => ["is invalid"]}}]} = json_response(conn, 422)
 
+    conn = api() |> post("/api/documents/#{id}/annotations/batch", %{annotations: [annotation(%{"page" => -1})]})
+
+    assert %{"errors" => [%{"errors" => %{"page" => ["must be greater than or equal to 0"]}}]} =
+             json_response(conn, 422)
+
     assert api() |> get("/api/documents?limit=abc") |> json_response(400) == %{
              "error" => "limit must be a non-negative integer"
            }
